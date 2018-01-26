@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent"
+    android:background="@drawable/gradient">
+
+    <EditText
+        android:id="@+id/nickEditText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="nick"
+        android:inputType="textPersonName"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="109dp"
+        android:drawableLeft="@drawable/ic_action_nick"
+        android:textColor="#ffffff"
+        android:textColorHint="#b2b2b2"
+        android:background="#11000000"/>
+
+    <EditText
+        android:id="@+id/passssEditText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="hasło"
+        android:inputType="textPassword"
+        android:layout_below="@+id/nickEditText"
+        android:layout_alignStart="@+id/nickEditText"
+        android:layout_marginTop="52dp"
+        android:textColorHint="#b2b2b2"
+        android:textColor="#ffffff"
+        android:drawableLeft="@drawable/ic_action_nazwa"
+        android:background="#11000000"/>
+
+    <Button
+        android:id="@+id/joinButtonn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Dołącz"
+        android:layout_below="@+id/passssEditText"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="45dp"
+        android:background="@drawable/mybutton"
+        android:textColor="#000000"/>
+
+    <TextView
+        android:id="@+id/gameNameTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="57dp" />
+
+</RelativeLayout>

@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:weightSum="1"
+    android:background="@drawable/gradient"
+    android:padding="5dp">
+
+    <TextView
+        android:id="@+id/czasPrzeciwnikaTextView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.14"
+        android:text="TextView"
+        android:textColor="#ffffff"
+        android:textSize="24dp" />
+
+    <TextView
+        android:id="@+id/czasGraczatextView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/czasPrzeciwnikaTextView"
+        android:layout_weight="0.14"
+        android:text="TextView"
+        android:textColor="#ffffff"
+        android:textSize="24dp" />
+
+    <Button
+        android:id="@+id/przeciwnikWalkaButton"
+        android:layout_width="176dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/czasGraczatextView"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="51dp"
+        android:background="@drawable/mybutton"
+        android:padding="10dp"
+        android:text="OK"
+        android:textColor="#000000" />
+
+    <TextView
+        android:id="@+id/wygranaTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/czasGraczatextView"
+        android:text="TextView"
+        android:textSize="24dp"
+        android:textColor="#ffffff"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentStart="true" />
+
+
+
+</RelativeLayout>

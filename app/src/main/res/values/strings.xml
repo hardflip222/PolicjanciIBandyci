@@ -1,0 +1,6 @@
+<resources>
+    <string name="app_name">PInzynierska</string>
+    <string name="utworz">Utworz grę</string>
+    <string name="dolacz">Dołącz do gry</string>
+    <string name="title_activity_game">Map</string>
+</resources>

@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.piotr.pinzynierska.ResultActivity"
+    android:background="@drawable/gradient"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/koniecRozgrywkiTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="53dp"
+        android:text="Punkty"
+        android:textColor="#ffffff"
+        android:textSize="24dp" />
+
+    <TextView
+        android:id="@+id/wygraniTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Wygrani:"
+        android:textColor="#ffffff"
+        android:textSize="24dp"
+        android:layout_marginTop="27dp"
+        android:layout_below="@+id/koniecRozgrywkiTextView"
+        android:layout_centerHorizontal="true" />
+
+    <TextView
+        android:id="@+id/przegraniTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/wygraniTextView"
+        android:layout_below="@+id/wygraniTextView"
+        android:layout_marginTop="30dp"
+        android:text="Przegrani: "
+        android:textColor="#ffffff"
+        android:textSize="24dp" />
+
+    <Button
+        android:id="@+id/koniecGryButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/mybutton"
+        android:padding="10dp"
+        android:text="OK"
+        android:textColor="#000000" />
+
+    <ListView
+        android:id="@+id/punktyListView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentStart="true" />
+
+</LinearLayout>
