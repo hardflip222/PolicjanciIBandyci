@@ -321,8 +321,8 @@ public class GameActivity extends FragmentActivity implements OnMapReadyCallback
             Log.e(TAG, "Can't find style. Error: ", e);
         }
 
-        mMap.setMinZoomPreference(5.0f);
-        mMap.setMaxZoomPreference(30.0f);
+        mMap.setMinZoomPreference(15.0f);
+        mMap.setMaxZoomPreference(20.0f);
 
         //klikniecie na złodzieja
         mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
