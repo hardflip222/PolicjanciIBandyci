@@ -4,6 +4,7 @@ package com.example.piotr.pinzynierska;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -30,10 +31,14 @@ public class JoinActivity extends AppCompatActivity {
     String name;
     Button btn;
     int czas;
+
+    View mLayout;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_join);
+
+        mLayout = findViewById(R.id.joinActivity);
 
         Intent intent = getIntent();
         this.name=intent.getStringExtra("name");
@@ -48,9 +53,24 @@ public class JoinActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                new SprawdzHaslo()
-                        // .execute("http://192.168.1.12/test/SprawdzHaslo.php");
-                        .execute("http://polizlo.5v.pl/test/SprawdzHaslo.php");
+                EditText has = (EditText) findViewById(R.id.passssEditText);
+                String haslo=has.getText().toString();
+
+                TextView nazw = (TextView) findViewById(R.id.nickEditText);
+                String naz = nazw.getText().toString();
+
+                if(naz.equals("") || haslo.equals(""))
+                {
+                    Snackbar.make(mLayout, "Nie wszystkie dane zostały wypełnione",
+                            Snackbar.LENGTH_SHORT)
+                            .show();
+                }
+                else {
+
+                    new SprawdzHaslo()
+                            // .execute("http://192.168.1.12/test/SprawdzHaslo.php");
+                            .execute("http://polizlo.5v.pl/test/SprawdzHaslo.php");
+                }
             }
         });
     }

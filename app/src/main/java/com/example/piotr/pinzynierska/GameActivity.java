@@ -3,6 +3,7 @@ package com.example.piotr.pinzynierska;
 import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
@@ -320,8 +321,8 @@ public class GameActivity extends FragmentActivity implements OnMapReadyCallback
             Log.e(TAG, "Can't find style. Error: ", e);
         }
 
-        mMap.setMinZoomPreference(15.0f);
-        mMap.setMaxZoomPreference(20.0f);
+        mMap.setMinZoomPreference(5.0f);
+        mMap.setMaxZoomPreference(30.0f);
 
         //klikniecie na złodzieja
         mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
@@ -553,6 +554,10 @@ public class GameActivity extends FragmentActivity implements OnMapReadyCallback
                         setDziuple(pozycja);
                         setPola(pozycja);
                         setPrzeciwnicy(pozycja);
+
+                          new RozpocznijGre()
+                        //      .execute("http://192.168.1.12/test/UaktualnijStanGry.php");
+                                 .execute("http://polizlo.5v.pl/test/UaktualnijStanGry.php");
 
 
 
@@ -3420,6 +3425,124 @@ public class GameActivity extends FragmentActivity implements OnMapReadyCallback
         @Override
         protected void onPostExecute(String result) {
 
+        }
+    }
+
+
+
+
+
+
+
+    // wysyła na serwer informacje o rozpoczętej grze
+    private class RozpocznijGre extends AsyncTask<String, Void, String> {
+
+        // okienko dialogowe, które każe użytkownikowi czekać
+        private ProgressDialog dialog = new ProgressDialog(GameActivity.this);
+
+        // metoda wykonywana jest zaraz przed główną operacją (doInBackground())
+        // mamy w niej dostęp do elementów UI
+        @Override
+        protected void onPreExecute() {
+
+
+            // wyświetlamy okienko dialogowe każące czekać
+            dialog.setMessage("Czekaj...");
+            dialog.show();
+        }
+
+        // główna operacja, która wykona się w osobnym wątku
+        // nie ma w niej dostępu do elementów UI
+        @Override
+        protected String doInBackground(String... urls) {
+
+            try {
+                // zakładamy, że jest tylko jeden URL
+                URL url = new URL(urls[0]);
+                HttpURLConnection connection = (HttpURLConnection) url
+                        .openConnection();
+                connection.setReadTimeout(10000 /* milliseconds */);
+                connection.setConnectTimeout(15000 /* milliseconds */);
+
+                // zezwolenie na wysyłanie danych
+                connection.setDoOutput(true);
+                // ustawienie typu wysyłanych danych
+                connection.setRequestProperty("Content-Type",
+                        "application/json");
+                // ustawienie metody
+                connection.setRequestMethod("POST");
+
+                // stworzenie obiektu do wysłania
+                JSONObject data = new JSONObject();
+                data.put("nazwa",nazwa);
+                data.put("stan","T");
+
+
+
+                // wysłanie obiektu
+                BufferedWriter writer = new BufferedWriter(
+                        new OutputStreamWriter(connection.getOutputStream(),
+                                "UTF-8"));
+                writer.write(data.toString());
+                writer.close();
+
+                //////////////////////////////////////////
+                // na tym etapie obiekt został wysłany
+                // i dostaliśmy odpowiedź serwera
+                //////////////////////////////////////////
+
+                // sprawdzenie kodu odpowiedzi, 200 = OK
+                if (connection.getResponseCode() != 200) {
+                    throw new Exception("Bad Request");
+                }
+
+
+                // pobranie odpowiedzi serwera
+                InputStream in = new BufferedInputStream(
+                        connection.getInputStream());
+
+                // konwersja InputStream na String
+                // wynik będzie przekazany do metody onPostExecute()
+
+                return streamToString(in);
+
+            } catch (Exception e) {
+                // obsłuż wyjątek
+                Log.d(StartActivity.class.getSimpleName(), e.toString());
+                return null;
+            }
+
+
+
+
+        }
+
+        // metoda wykonuje się po zakończeniu metody głównej,
+        // której wynik będzie przekazany;
+        // w tej metodzie mamy dostęp do UI
+        @Override
+        protected void onPostExecute(String result) {
+
+
+            // chowamy okno dialogowe
+            dialog.dismiss();
+
+            try {
+                // reprezentacja obiektu JSON w Javie
+
+                JSONObject json = new JSONObject(result);
+
+
+                Toast.makeText(getApplicationContext(),"status: "+json.optString("status")+", msg: "+json.optString("msg"),Toast.LENGTH_SHORT).show();
+                // pobranie pól obiektu JSON i wyświetlenie ich na ekranie
+                // ((TextView) findViewById(R.id.response_id)).setText("status: "+ json.optString("status"));
+                // ((TextView) findViewById(R.id.response_name)).setText("msg: "
+                //       + json.optString("msg"));
+
+            } catch (Exception e) {
+                // obsłuż wyjątek
+                Log.d(StartActivity.class.getSimpleName(), e.toString());
+            }
         }
     }
 

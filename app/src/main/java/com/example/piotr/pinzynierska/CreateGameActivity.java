@@ -3,6 +3,7 @@ package com.example.piotr.pinzynierska;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -10,6 +11,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
@@ -33,12 +35,14 @@ public class CreateGameActivity extends AppCompatActivity {
     Button createGameButton;
     Spinner spinner;
     Spinner czasSpinner;
+    CheckBox botyCheckBox;
     Integer[] numbers = {1,2,3,4,5,6,7,8,9,10};
     Integer[] czasGry = {15,30,45};
     int number=1;
     int czas = 15;
     ConnectionDetector cd;
     Timer timerInternet;
+    View mLayout;
 
 
     CzyInternetDziala czyInternetDziala;
@@ -46,12 +50,15 @@ public class CreateGameActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_game);
+        mLayout = findViewById(R.id.createGameActivity);
 
         createGameButton = (Button) findViewById(R.id.createGameButton);
         spinner = (Spinner) findViewById(R.id.playersNumer);
         spinner.setAdapter(new ArrayAdapter<Integer>(this,android.R.layout.simple_spinner_item,numbers));
         czasSpinner = (Spinner) findViewById(R.id.czasSpinner);
         czasSpinner.setAdapter(new ArrayAdapter<Integer>(this,android.R.layout.simple_spinner_item,czasGry));
+
+        botyCheckBox = (CheckBox) findViewById(R.id.botyChechBox);
 
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener(){
 
@@ -90,7 +97,30 @@ public class CreateGameActivity extends AppCompatActivity {
         createGameButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new CreateGame().execute("http://polizlo.5v.pl/test/NowaGra.php");
+                EditText ni = (EditText) findViewById(R.id.nickEditText);
+                EditText naz = (EditText) findViewById(R.id.nameEditText);
+                EditText has = (EditText) findViewById(R.id.passEditText);
+                String nazwa=naz.getText().toString();
+                String haslo=has.getText().toString();
+                String nick =ni.getText().toString();
+
+                if(nazwa.equals("") || haslo.equals("") || nick.equals(""))
+                {
+                    Snackbar.make(mLayout, "Nie wszystkie dane zostały wypełnione",
+                            Snackbar.LENGTH_SHORT)
+                            .show();
+                }
+                else {
+
+                       if(botyCheckBox.isChecked() && number == 1)
+                       {
+                           Toast.makeText(getApplicationContext(),"Wybrano gre z jednym gracze. Wybierz więcej by grać z botami!!!",Toast.LENGTH_SHORT).show();
+                       }
+                       else {
+
+                           new CreateGame().execute("http://polizlo.5v.pl/test/NowaGra.php");
+                       }
+                }
             }
         });
 
@@ -167,6 +197,12 @@ public class CreateGameActivity extends AppCompatActivity {
                 data.put("nick",this.nick);
                 data.put("max",number);
                 data.put("czas",czas);
+                if(botyCheckBox.isChecked())
+                data.put("boty","T");
+                else
+                data.put("boty","N");
+
+
 
                 // wysłanie obiektu
                 BufferedWriter writer = new BufferedWriter(
@@ -222,13 +258,17 @@ public class CreateGameActivity extends AppCompatActivity {
                 JSONObject json = new JSONObject(result);
 
 
-
+                Log.e("TakaSamaNazwa",json.toString());
                 if(Integer.parseInt(json.optString("status")) == 1)
                 {
 
                     Toast.makeText(getApplicationContext(),json.optString("msg"),Toast.LENGTH_SHORT).show();
                     new DolaczDoGry().execute("http://polizlo.5v.pl/test/DolaczDoGry.php");
 
+                }
+                else if(Integer.parseInt(json.optString("status")) == 2)
+                {
+                    Toast.makeText(getApplicationContext(),json.optString("msg"),Toast.LENGTH_SHORT).show();
                 }
 
 
@@ -378,6 +418,7 @@ public class CreateGameActivity extends AppCompatActivity {
                     intent.putExtra("nick",this.nk);
                     intent.putExtra("max",number);
                     intent.putExtra("czas",czas);
+                    intent.putExtra("boty",botyCheckBox.isChecked());
                     startActivity(intent);
                 }
 

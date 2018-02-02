@@ -57,6 +57,7 @@ public class GamePanelActivity extends AppCompatActivity {
     AktualizujListeGraczy aktualizujListeGraczy;
     boolean losowanie = false;
     boolean boty = false;
+    boolean czyBotyZaznaczone = false;
 
 
 
@@ -70,6 +71,7 @@ public class GamePanelActivity extends AppCompatActivity {
         nick = intnet.getStringExtra("nick");
         max=intnet.getIntExtra("max",1);
         czas = intnet.getIntExtra("czas",czas);
+        czyBotyZaznaczone = intnet.getBooleanExtra("boty",false);
         playersListView = (ListView) findViewById(R.id.playersListView);
         stanGryTextView = (TextView) findViewById(R.id.stanGryTextView);
         gameName = (TextView) findViewById(R.id.gameNameTextView);
@@ -121,9 +123,9 @@ public class GamePanelActivity extends AppCompatActivity {
                     }
                     else {
 
-                        new RozpocznijGre()
+                      //  new RozpocznijGre()
                                 //      .execute("http://192.168.1.12/test/UaktualnijStanGry.php");
-                                .execute("http://polizlo.5v.pl/test/UaktualnijStanGry.php");
+                       //         .execute("http://polizlo.5v.pl/test/UaktualnijStanGry.php");
                         timer.cancel();
                         Intent intent = new Intent(getApplicationContext(), GameActivity.class);
                         intent.putExtra("nazwa", nazwa);
@@ -155,7 +157,9 @@ public class GamePanelActivity extends AppCompatActivity {
                 {
 
                     new DolaczDoGry(nazwa,"BOT"+(i+1)).execute("http://polizlo.5v.pl/test/DolaczDoGry.php");
+                    Toast.makeText(getApplicationContext(),"Boty Dodano!!!",Toast.LENGTH_SHORT).show();
                     boty = true;
+                    botyButton.setVisibility(View.GONE);
                 }
             }
         });
@@ -173,6 +177,10 @@ public class GamePanelActivity extends AppCompatActivity {
         }
         else
         {
+            if(czyBotyZaznaczone==false)
+            {
+                botyButton.setVisibility(View.GONE);
+            }
            // stanGryTextView.setVisibility(View.GONE);
         }
 

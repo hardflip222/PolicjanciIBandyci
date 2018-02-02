@@ -31,6 +31,7 @@ public class JoinToGameActivity extends AppCompatActivity {
     Timer timer;
     AktualizujTimerTask aktualizujTimerTask;
     ArrayList<Integer> czasy;
+    ArrayList<String> boty;
 
 
 
@@ -82,6 +83,7 @@ public class JoinToGameActivity extends AppCompatActivity {
                 JSONArray jsonArrayStany = new JSONArray(jsonObject.optString("stany"));
                 JSONArray jsonArrayIle = new JSONArray(jsonObject.optString("ile"));
                 JSONArray jsonArrayCzasy = new JSONArray(jsonObject.optString("czasy"));
+                JSONArray jsonArrayBoty = new JSONArray(jsonObject.optString("boty"));
 
                 for(int i =0;i<jsonArrayName.length();i++)
                 {
@@ -91,14 +93,19 @@ public class JoinToGameActivity extends AppCompatActivity {
                     JSONObject jsonObjstan = new JSONObject(jsonArrayStany.getString(i));
                     JSONObject jsonObjile = new JSONObject(jsonArrayIle.getString(i));
                     JSONObject jsonObjczas = new JSONObject(jsonArrayCzasy.getString(i));
+                    JSONObject jsonObjboty = new JSONObject(jsonArrayBoty.getString(i));
+                    Log.e("tablica botow", jsonObjboty.optString("boty"));
 
                     Log.d("name",jsonArrayName.getString(i));
                     Log.d("zal",jsonArrayZalozyciele.getString(i));
                     Log.d("max",jsonArrayMaxy.getString(i));
                    Log.d("ile",jsonArrayIle.getString(i));
+                   Log.d("boty",jsonArrayBoty.getString(i));
 
                     games.add(new Game(jsonObjN.optString("nazwa"),jsonObjZa.optString("zalozyciel"),Integer.parseInt(jsonObjmax.optString("mx")),jsonObjstan.optString("stan"),Integer.parseInt(jsonObjile.optString("COUNT(*)"))));
                    czasy.add(Integer.parseInt(jsonObjczas.optString("czas")));
+                   boty.add(jsonObjboty.optString("boty"));
+
                 }
 
 
@@ -134,6 +141,7 @@ public class JoinToGameActivity extends AppCompatActivity {
         c = this;
         games = new ArrayList<>();
         czasy = new ArrayList<>();
+        boty = new ArrayList<>();
         gamesListView = (ListView) findViewById(R.id.gamesListView);
 
 
@@ -153,11 +161,18 @@ public class JoinToGameActivity extends AppCompatActivity {
                         Toast.makeText(getApplicationContext(),"Maxymalna ilość osób w grze",Toast.LENGTH_SHORT).show();
                     }
                     else {
-                        Intent intent = new Intent(getApplicationContext(), JoinActivity.class);
-                        intent.putExtra("name", games.get(position).name);
-                        intent.putExtra("czas",czasy.get(position));
-                        timer.cancel();
-                        startActivity(intent);
+
+                        if(boty.get(position).equals("T"))
+                        {
+                            Toast.makeText(getApplicationContext(),"Gra dla pojedynczego gracza z botami, nie mozna dołączyć",Toast.LENGTH_SHORT).show();
+                        }
+                        else {
+                            Intent intent = new Intent(getApplicationContext(), JoinActivity.class);
+                            intent.putExtra("name", games.get(position).name);
+                            intent.putExtra("czas", czasy.get(position));
+                            timer.cancel();
+                            startActivity(intent);
+                        }
                     }
                 }
             }
